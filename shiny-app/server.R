@@ -42,9 +42,10 @@ shinyServer(function(input, output, session) {
       clearShapes() %>%
       #addTiles() %>%
       #addMarkers(~Longitude, ~Latitude)
-      addCircles(radius = ~cv, weight = 1, color = "#777777",
-                 fillColor = "#777777", fillOpacity = 0.7, popup = ~paste(cv)
-      )
+     # addCircles(radius = ~cv, weight = 1, color = "#777777",
+    #             fillColor = "#777777", fillOpacity = 0.7, popup = ~paste(cv)
+    addCircleMarkers(radius = ~cv*10)
+      
   })
   
   # Use a separate observer to recreate the legend as needed.
