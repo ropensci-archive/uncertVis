@@ -14,13 +14,13 @@ shinyServer(function(input, output, session) {
 
   # Reactive expression for the data subsetted to what the user selected
   filteredData <- reactive({
-    site.xy[site.xy$cv >= input$range[1] & site.xy$cv <= input$range[2],]
+    site.xy[site.xy$m >= input$range[1] & site.xy$m <= input$range[2],]
   })
   
   # This reactive expression represents the palette function,
   # which changes as the user makes selections in UI.
   colorpal <- reactive({
-    colorNumeric(input$colors, site.xy$cv)
+    colorNumeric(input$colors, site.xy$m)
   })
   
   output$map <- renderLeaflet({
@@ -39,12 +39,14 @@ shinyServer(function(input, output, session) {
     pal <- colorpal()
     
     leafletProxy("map", data = filteredData()) %>%
-      clearShapes() %>%
-      #addTiles() %>%
+      clearMarkers() %>%
+      addTiles() %>%
       #addMarkers(~Longitude, ~Latitude)
-     # addCircles(radius = ~cv, weight = 1, color = "#777777",
-    #             fillColor = "#777777", fillOpacity = 0.7, popup = ~paste(cv)
-    addCircleMarkers(radius = ~cv*10)
+     # addCircles(radius = ~m, weight = 1, color = "#777777",
+    #             fillColor = "#777777", fillOpacity = 0.7, popup = ~paste(m)
+    addCircleMarkers(radius = ~10, color = "#777777",
+                                  fillColor = ~pal(m), fillOpacity = 0.7, 
+                     popup = ~paste(m))
       
   })
   
@@ -58,7 +60,7 @@ shinyServer(function(input, output, session) {
     if (input$legend) {
       pal <- colorpal()
       proxy %>% addLegend(position = "bottomright",
-                          pal = pal, values = ~cv
+                          pal = pal, values = ~m
       )
     }
   })
