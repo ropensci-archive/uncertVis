@@ -6,6 +6,8 @@
 #
 
 library(shiny)
+source("data.R")
+
 r_colors <- rgb(t(col2rgb(colors()) / 255))
 
 names(r_colors) <- colors()
