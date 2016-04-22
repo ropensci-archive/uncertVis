@@ -17,7 +17,7 @@ shinyUI(fluidPage(
   fluidRow(
     column(9,
            leafletOutput("map"),
-           plotOutput("excplot")
+           plotlyOutput("excplot")
     ),
     column(3,
            sliderInput("range", "Thresholds", 1, length(thresholdLabels),
