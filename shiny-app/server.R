@@ -6,7 +6,7 @@
 #
 
 library(shiny)
-source("data.R")
+source("data.R", local=TRUE)
 
 r_colors <- rgb(t(col2rgb(colors()) / 255))
 
@@ -16,20 +16,20 @@ shinyServer(function(input, output, session) {
 
   # Reactive expression for the data subsetted to what the user selected
   filteredData <- reactive({
-    site.xy[site.xy$m >= input$range[1] & site.xy$m <= input$range[2],]
+    displayData[displayData$displayValue >= input$range[1] & displayData$displayValue <= input$range[2],]
   })
   
   # This reactive expression represents the palette function,
   # which changes as the user makes selections in UI.
   colorpal <- reactive({
-    colorNumeric(input$colors, site.xy$m)
+    colorNumeric(input$colors, displayData$displayValue)
   })
   
   output$map <- renderLeaflet({
     # Use leaflet() here, and only include aspects of the map that
     # won't need to change dynamically (at least, not unless the
     # entire map is being torn down and recreated).
-    leaflet(site.xy) %>% addTiles() %>%
+    leaflet(displayData) %>% addTiles() %>%
       fitBounds(~min(Longitude), ~min(Latitude), ~max(Longitude), ~max(Latitude))
   })
   
@@ -44,17 +44,17 @@ shinyServer(function(input, output, session) {
       clearMarkers() %>%
       addTiles() %>%
       #addMarkers(~Longitude, ~Latitude)
-     # addCircles(radius = ~m, weight = 1, color = "#777777",
-    #             fillColor = "#777777", fillOpacity = 0.7, popup = ~paste(m)
+     # addCircles(radius = ~displayValue, weight = 1, color = "#777777",
+    #             fillColor = "#777777", fillOpacity = 0.7, popup = ~paste(displayValue)
     addCircleMarkers(radius = ~10, color = "#777777",
-                                  fillColor = ~pal(m), fillOpacity = 0.7, 
-                     popup = ~paste(m))
+                                  fillColor = ~pal(displayValue), fillOpacity = 0.7, 
+                     popup = ~paste(displayValue))
       
   })
   
   # Use a separate observer to recreate the legend as needed.
   observe({
-    proxy <- leafletProxy("map", data = site.xy)
+    proxy <- leafletProxy("map", data = displayData)
     
     # Remove any existing legend, and only if the legend is
     # enabled, create a new one.
@@ -62,7 +62,7 @@ shinyServer(function(input, output, session) {
     if (input$legend) {
       pal <- colorpal()
       proxy %>% addLegend(position = "bottomright",
-                          pal = pal, values = ~m
+                          pal = pal, values = ~displayValue
       )
     }
   })

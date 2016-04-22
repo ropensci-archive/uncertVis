@@ -19,3 +19,11 @@ site.xy$p90 <- as.numeric(dataL.p90[1,])
 site.xy$p95 <- as.numeric(dataL.p95[1,])
 site.xy$p975 <- as.numeric(dataL.p975[1,])
 
+# The variable names for the UI
+# it is possible to specify checkboxes (binary), select (one from many options), or a slider (min & max with selected ranges)
+
+# main data variable is named 'displayData'
+displayData <- site.xy
+
+# the property / ellement is named 'displayValue'
+displayData$displayValue <- site.xy$m
