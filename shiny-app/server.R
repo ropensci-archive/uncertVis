@@ -56,7 +56,7 @@ shinyServer(function(input, output, session) {
     #             fillColor = "#777777", fillOpacity = 0.7, popup = ~paste(displayValue)
     addCircleMarkers(radius = ~10, color = "#777777",
                                   fillColor = ~pal(displayValue), fillOpacity = 0.7, 
-                     popup = ~paste(displayValue))
+                     popup = ~paste(round(displayValue,2)))
       
   })
   
