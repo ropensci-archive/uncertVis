@@ -18,10 +18,15 @@ shinyServer(function(input, output, session) {
   # Reactive expression for the data subsetted to what the user selected
   filteredData <- reactive({
     isAboveOnly = input$threshold
-    if(isAboveOnly){
-      displayData[displayData$displayValue >= input$range[1], ]
-    } else
-      displayData[displayData$displayValue <= input$range[1], ]
+    sliderSelection <- input$range[1]
+    timeseriesMarkers <- timeseriesTh[[sliderSelection]]
+    # chose first timeseries row
+    markersThresholds <- timeseriesMarkers[1, ]
+    displayData$t1 <- markersThresholds
+    #if(isAboveOnly){
+    #  displayData[displayData$displayValue >= input$range[1], ]
+    #} else
+    #  displayData[displayData$displayValue <= input$range[1], ]
     
     
   })
@@ -29,7 +34,7 @@ shinyServer(function(input, output, session) {
   # This reactive expression represents the palette function,
   # which changes as the user makes selections in UI.
   colorpal <- reactive({
-    colorNumeric(input$colors, displayData$displayValue)
+    colorNumeric(input$colors, displayData$t1)
   })
   
   output$map <- renderLeaflet({
@@ -73,9 +78,12 @@ shinyServer(function(input, output, session) {
       #addMarkers(~Longitude, ~Latitude)
      # addCircles(radius = ~displayValue, weight = 1, color = "#777777",
     #             fillColor = "#777777", fillOpacity = 0.7, popup = ~paste(displayValue)
-    addCircleMarkers(radius = ~10, color = "#777777",
-                                  fillColor = ~pal(displayValue), fillOpacity = 0.7, 
-                     popup = ~paste(round(displayValue,2)))
+    addCircleMarkers(radius = ~10, 
+                     color = "#777777",
+                     fillColor = ~pal(t1), 
+                     fillOpacity = 0.7, 
+                     layerId = ~paste(round(t1,2)),
+                     popup = ~paste(round(t1,2)))
       
   })
   
@@ -89,9 +97,26 @@ shinyServer(function(input, output, session) {
     if (input$legend) {
       pal <- colorpal()
       proxy %>% addLegend(position = "bottomright",
-                          pal = pal, values = ~displayValue
+                          pal = pal, values = ~t1
       )
     }
+  })
+  
+  # Show a popup at the given location
+  selectMarker <- function(id, lat, lng) {
+    leafletProxy("map") %>% addPopups(lng, lat, id, layerId = id)
+  }
+  
+  # when a marker is clicked, get info about it
+  observe({
+    leafletProxy("map") %>% clearPopups()
+    event <- input$map_marker_click
+    if (is.null(event))
+      return()
+    
+    isolate({
+      selectMarker(event$id, event$lat, event$lng)
+    })
   })
 
 })
