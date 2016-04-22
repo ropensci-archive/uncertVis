@@ -16,7 +16,13 @@ shinyServer(function(input, output, session) {
 
   # Reactive expression for the data subsetted to what the user selected
   filteredData <- reactive({
-    displayData[displayData$displayValue >= input$range[1] & displayData$displayValue <= input$range[2],]
+    isAboveOnly = input$threshold
+    if(isAboveOnly){
+      displayData[displayData$displayValue >= input$range[1], ]
+    } else
+      displayData[displayData$displayValue <= input$range[1], ]
+    
+    
   })
   
   # This reactive expression represents the palette function,

@@ -42,3 +42,6 @@ displayData <- site.xy
 
 # the property / ellement is named 'displayValue'
 displayData$displayValue <- site.xy$m
+
+thresholdLabels <- labels(dataL.MK)
+

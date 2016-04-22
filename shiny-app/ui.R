@@ -20,15 +20,17 @@ shinyUI(fluidPage(
            plotOutput("excplot")
     ),
     column(3,
-           sliderInput("range", "Magnitudes", round(min(displayData$displayValue),1), 
-                       round(max(displayData$displayValue),1),
-                       value = round(range(displayData$displayValue),1), step = 0.1
+           sliderInput("range", "Thresholds", 1, length(thresholdLabels),
+                       value = 1, step = 1
            ),
+           
+           paste(thresholdLabels, collapse=', '),
+           
+           checkboxInput("threshold", "Check to show only values above threshold; uncheck to show only values below threshold", TRUE),
            selectInput("colors", "Color Scheme",
                        rownames(subset(brewer.pal.info, category %in% c("seq", "div")))
            ),
-           checkboxInput("legend", "Show legend", TRUE),
-           checkboxInput("thresholdType", "Remove values outside threshold", TRUE)
+           checkboxInput("legend", "Show legend", TRUE)
     )
   )
 ))
