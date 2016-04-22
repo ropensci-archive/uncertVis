@@ -22,7 +22,9 @@ shinyServer(function(input, output, session) {
     timeseriesMarkers <- timeseriesTh[[sliderSelection]]
     # chose first timeseries row
     markersThresholds <- timeseriesMarkers[1, ]
+   # browser()
     displayData$t1 <- markersThresholds
+    displayData
     #if(isAboveOnly){
     #  displayData[displayData$displayValue >= input$range[1], ]
     #} else
@@ -34,6 +36,7 @@ shinyServer(function(input, output, session) {
   # This reactive expression represents the palette function,
   # which changes as the user makes selections in UI.
   colorpal <- reactive({
+  
     colorNumeric(input$colors, displayData$t1)
   })
   
@@ -78,7 +81,8 @@ shinyServer(function(input, output, session) {
       #addMarkers(~Longitude, ~Latitude)
      # addCircles(radius = ~displayValue, weight = 1, color = "#777777",
     #             fillColor = "#777777", fillOpacity = 0.7, popup = ~paste(displayValue)
-    addCircleMarkers(radius = ~10, 
+ 
+       addCircleMarkers(radius = ~10, 
                      color = "#777777",
                      fillColor = ~pal(t1), 
                      fillOpacity = 0.7, 

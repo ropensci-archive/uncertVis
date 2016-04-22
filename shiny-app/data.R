@@ -39,6 +39,7 @@ names(dataL.MK) <- round(th, 0)
 
 # main data variable is named 'displayData'
 displayData <- site.xy
+displayData$t1 <- c(0, 0.25, 0.75, 1.0)
 
 # the property / ellement is named 'displayValue'
 #displayData$displayValue <- site.xy$m
