@@ -19,16 +19,20 @@ site.xy$p90 <- as.numeric(dataL.p90[1,])
 site.xy$p95 <- as.numeric(dataL.p95[1,])
 site.xy$p975 <- as.numeric(dataL.p975[1,])
 
-# Construct exceedance thresholds
-thLevels<- c(0.5, 0.75, 0.8, 0.95, 0.975, 0.99)
-th <- quantile(unlist(dataLsub),thLevels)
-dataL.MK<-list()
-for (i in 1:length(th)){
-  print(paste(i,thLevels[i]))
-  tmp <- lapply(dataLsub, function(x, th) ifelse(x > th[i], 1, 0), th)
-  dataL.MK[[paste(thLevels[i])]] <- sapply(tmp, function(x) apply(x, 2, mean))
-  
-}
+## Construct exceedance thresholds
+#thLevels<- c(0.5, 0.75, 0.8, 0.95, 0.975, 0.99)
+#th <- quantile(unlist(dataLsub),thLevels)
+#dataL.MK<-list()
+#for (i in 1:length(th)){
+#  print(paste(i,thLevels[i]))
+#  tmp <- lapply(dataLsub, function(x, th) ifelse(x > th[i], 1, 0), th)
+#  dataL.MK[[paste(thLevels[i])]] <- sapply(tmp, function(x) apply(x, 2, mean))
+#  
+#}
+#save(dataL.MK, file="dataL.Mr.RData")
+load("Data/dataL.MK.RData")
+
+
 
 # The variable names for the UI
 # it is possible to specify checkboxes (binary), select (one from many options), or a slider (min & max with selected ranges)
