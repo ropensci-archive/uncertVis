@@ -17,7 +17,7 @@ shinyUI(fluidPage(
   fluidRow(
     column(9,
            leafletOutput("map"),
-           plotOutput("mapPlot")
+           plotOutput("excplot")
     ),
     column(3,
            sliderInput("range", "Magnitudes", round(min(displayData$displayValue),1), 
